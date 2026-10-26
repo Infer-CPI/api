@@ -1,6 +1,6 @@
 """InferCPI MCP server: the AI inference price index for agents. Read-only tools over the public
 v1 JSON API (https://infercpi.com/v1). One file, one dependency (`pip install mcp`); the same file
-is published in the public repo github.com/richovercash/infercpi-api.
+is published in the public repo github.com/Infer-CPI/api.
 
   python3 mcp_server.py          stdio (Claude Desktop / Claude Code / any MCP client)
   python3 mcp_server.py --http   streamable HTTP on :8765 (remote agents)

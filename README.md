@@ -31,7 +31,7 @@ More in [`examples/`](examples).
 
 ```bash
 mkdir -p ~/.local/share/infercpi
-curl -so ~/.local/share/infercpi/mcp_server.py https://raw.githubusercontent.com/richovercash/infercpi-api/main/mcp_server.py
+curl -so ~/.local/share/infercpi/mcp_server.py https://raw.githubusercontent.com/Infer-CPI/api/main/mcp_server.py
 pip install mcp                                       # mcp 1.x or 2.x both work
 claude mcp add infercpi -s user -- python3 ~/.local/share/infercpi/mcp_server.py   # Claude Code
 python3 ~/.local/share/infercpi/mcp_server.py --http  # or: streamable HTTP on :8765
