@@ -30,15 +30,17 @@ More in [`examples/`](examples).
 `mcp_server.py` gives agents ten read-only tools over the API: `index_latest`, `index_series`, `index_catalogue`, `basket`, `model_price`, `events`, `speed`, `open_vs_closed`, `self_hosting`, `cost_per_task`.
 
 ```bash
-pip install mcp
-claude mcp add infercpi -- python mcp_server.py      # Claude Code
-python mcp_server.py --http                          # streamable HTTP on :8765
+mkdir -p ~/.local/share/infercpi
+curl -so ~/.local/share/infercpi/mcp_server.py https://raw.githubusercontent.com/richovercash/infercpi-api/main/mcp_server.py
+pip install mcp                                       # mcp 1.x or 2.x both work
+claude mcp add infercpi -s user -- python3 ~/.local/share/infercpi/mcp_server.py   # Claude Code
+python3 ~/.local/share/infercpi/mcp_server.py --http  # or: streamable HTTP on :8765
 ```
 
 Claude Desktop (`claude_desktop_config.json`):
 
 ```json
-{ "mcpServers": { "infercpi": { "command": "python", "args": ["/path/to/mcp_server.py"] } } }
+{ "mcpServers": { "infercpi": { "command": "python3", "args": ["/home/YOU/.local/share/infercpi/mcp_server.py"] } } }
 ```
 
 It reads `https://infercpi.com` by default; set `INFERCPI_BASE` to point elsewhere.

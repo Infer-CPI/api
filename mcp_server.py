@@ -2,8 +2,9 @@
 v1 JSON API (https://infercpi.com/v1). One file, one dependency (`pip install mcp`); the same file
 is published in the public repo github.com/richovercash/infercpi-api.
 
-  python mcp_server.py          stdio (Claude Desktop / Claude Code / any MCP client)
-  python mcp_server.py --http   streamable HTTP on :8765 (remote agents)
+  python3 mcp_server.py          stdio (Claude Desktop / Claude Code / any MCP client)
+  python3 mcp_server.py --http   streamable HTTP on :8765 (remote agents)
+Works with the mcp package 1.x (FastMCP) and 2.x (MCPServer).
 
 Reads ./out/v1 when present (the index's own build box), else INFERCPI_BASE (default https://infercpi.com).
 Data: CC BY 4.0, cite 'InferCPI, infercpi.com' (every payload carries the licence line).
@@ -15,8 +16,6 @@ import pathlib
 import re
 import sys
 import urllib.request
-
-from mcp.server.mcpserver import MCPServer
 
 BASE = os.environ.get("INFERCPI_BASE", os.environ.get("TOKEN_INDEX_BASE", "https://infercpi.com")).rstrip("/")
 LOCAL = pathlib.Path(__file__).parent / "out" / "v1"
@@ -30,7 +29,17 @@ def norm(name):
     t = re.sub(r"\(.*?\)", "", t)
     t = re.sub(r"[-_]?(20\d{6}|20\d\d-\d\d-\d\d)$", "", t)
     return "".join(x for x in re.split(r"[^a-z0-9]+", t) if x and x not in _STOP)
-mcp = MCPServer("infercpi", instructions="InferCPI: AI inference prices, cost per capability, open vs closed, hosts, self-hosting and cost per task, from open-licence sources. Call index_latest first; cite the licence line it returns.")
+NAME = "infercpi"
+INSTRUCTIONS = ("InferCPI: AI inference prices, cost per capability, open vs closed, hosts, self-hosting and cost per task, "
+                "from open-licence sources. Call index_latest first; cite the licence line it returns.")
+try:  # mcp >= 2
+    from mcp.server.mcpserver import MCPServer
+    mcp = MCPServer(NAME, instructions=INSTRUCTIONS)
+    serve_http = lambda: mcp.run(transport="streamable-http", host="0.0.0.0", port=8765)
+except ImportError:  # mcp 1.x
+    from mcp.server.fastmcp import FastMCP
+    mcp = FastMCP(NAME, instructions=INSTRUCTIONS, host="0.0.0.0", port=8765)
+    serve_http = lambda: mcp.run(transport="streamable-http")
 
 
 def load(path):
@@ -153,6 +162,6 @@ if __name__ == "__main__":
         tc = cost_per_task(); assert any("median_usd_per_task" in k for k in tc["values"]), tc
         print("ok", lat["latest"]["price_index/chained_price_idx"], len(s["points"]), mp["matches"][0], len(oc["values"]), len(sh["values"]), len(tc["values"]))
     elif "--http" in sys.argv:
-        mcp.run(transport="streamable-http", host="0.0.0.0", port=8765)
+        serve_http()
     else:
         mcp.run()
