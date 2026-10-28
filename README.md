@@ -29,6 +29,16 @@ More in [`examples/`](examples).
 
 `mcp_server.py` gives agents ten read-only tools over the API: `index_latest`, `index_series`, `index_catalogue`, `basket`, `model_price`, `events`, `speed`, `open_vs_closed`, `self_hosting`, `cost_per_task`.
 
+**Hosted, no key:** `https://infercpi.com/mcp` (streamable HTTP).
+
+```bash
+claude mcp add --transport http infercpi https://infercpi.com/mcp   # Claude Code
+```
+
+Claude.ai and Claude Desktop: Settings → Connectors → Add custom connector, paste the URL.
+
+**Or run it yourself:**
+
 ```bash
 mkdir -p ~/.local/share/infercpi
 curl -so ~/.local/share/infercpi/mcp_server.py https://raw.githubusercontent.com/Infer-CPI/api/main/mcp_server.py

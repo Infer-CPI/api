@@ -1,0 +1,10 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "com.infercpi/api",
+  "title": "InferCPI",
+  "description": "AI inference price index: token prices, cost per capability, open vs closed, hosts, cost per task.",
+  "version": "1.0.0",
+  "websiteUrl": "https://infercpi.com/api.html",
+  "repository": { "url": "https://github.com/Infer-CPI/api", "source": "github" },
+  "remotes": [{ "type": "streamable-http", "url": "https://infercpi.com/mcp" }]
+}
